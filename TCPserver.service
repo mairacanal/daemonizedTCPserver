@@ -1,0 +1,10 @@
+[Unit]
+Description=A simple TCP server
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/TCPserver
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
