@@ -6,9 +6,9 @@ Modern services for Linux should be implemented as Systemd-style daemons. For de
 
 The server was built with a Linux TCP socket with a multi-thread approach. Each client has his thread and they can send a message to the server so that the server will send the message back.
 
-## How to run?
+## How to install?
 
-In order to compile the files, you must run:
+In order to compile and install the files, you must run:
 
 ```
 mkdir build
@@ -18,7 +18,9 @@ make
 sudo make install
 ```
 
-The next step is to run your daemon:
+## How to start?
+
+The next step is to start your daemon:
 
 ```
 sudo systemctl daemon-reload
@@ -30,6 +32,12 @@ To remove the daemon, you must run:
 
 ```
 sudo systemctl stop TCPserver
+```
+
+To see the syslog:
+
+```
+tail -f /var/log/syslog
 ```
 
 To run the client, you must run:
