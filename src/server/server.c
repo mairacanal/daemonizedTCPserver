@@ -1,41 +1,45 @@
 #include "server.h"
 
-void* server_thread (void* args) {
+/*
+ * @brief Behavior of the server thread receiving and sending message from an to the client
+ * @params id Client unique file descriptor (id) 
+ */
 
-    int id, sentBytes, recvBytes;
+void* server_thread (void* id) {
+
+    int sentBytes, recvBytes;
     char buf[MAX_FLOW_SIZE];
-
-    pthread_mutex_lock(&mut);
-    id = ++threadId;
-    pthread_mutex_unlock(&mut);
 
     do {
 
         memset(buf, 0, sizeof(buf));
-        recvBytes = recv((int) args, buf, MAX_FLOW_SIZE, 0);
+        recvBytes = recv((int) id, buf, MAX_FLOW_SIZE, 0);
         if (recvBytes <= 0) {
             if (recvBytes < 0)
-                syslog(LOG_INFO, "Thread %d: connection lost\n", id);
+                syslog(LOG_INFO, "Thread %d: connection lost\n", (int) id);
             else
-                syslog(LOG_INFO, "Thread %d: ending connection\n", id);
-            id = --threadId;
+                syslog(LOG_INFO, "Thread %d: ending connection\n", (int) id);
         } else {
-            sentBytes = send((int) args, buf, strlen(buf), 0);
+            sentBytes = send((int) id, buf, strlen(buf), 0);
 
             if (recvBytes < 0) {
-                syslog(LOG_INFO, "Thread %d: connection lost\n", id);
-                id = --threadId;
+                syslog(LOG_INFO, "Thread %d: connection lost\n", (int) id);
             }
             else
-                syslog(LOG_INFO, "Thread %d - message send: [%s]\n", id, buf);
+                syslog(LOG_INFO, "Thread %d - message send: [%s]\n", (int) id, buf);
         }
 
     } while (recvBytes > 0);
 
-    close((int) args);
+    close((int) id);
     pthread_exit(0);
 
 }
+
+/*
+ * @brief Initialize TCP socket
+ * @params port TCP port number
+ */
 
 int initialize_socket (int port) {
 
@@ -77,6 +81,11 @@ int initialize_socket (int port) {
 
 }
 
+/*
+ * @brief Accept client connection and creates a client thread
+ * @params s Socket file descriptor
+ */
+
 int establish_connection (int s) {
 
     int id;
@@ -93,6 +102,11 @@ int establish_connection (int s) {
     }
 
 }
+
+/*
+ * @brief Closes TCP socket
+ * @params s Socket file descriptor
+ */
 
 int socket_close (int s) {
 

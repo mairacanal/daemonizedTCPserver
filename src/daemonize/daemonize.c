@@ -1,5 +1,13 @@
 #include "daemonize.h"
 
+/*
+ * @brief Defines the daemon behavior for different signals
+ * @params sig POSIX signal
+ * @params sigint Function to be executed if signal is SIGINT
+ * @params sighup Function to be executed if signal is SIGHUP
+ * @params sigchld Function to be executed if signal is SIGCHLD
+ */
+
 void handle_signal(int sig, void (* sigint)(), void (* sighup)(), void (* sigchld)()) {
 
     switch (sig) {
@@ -19,6 +27,13 @@ void handle_signal(int sig, void (* sigint)(), void (* sighup)(), void (* sigchl
     }
 
 }
+
+/*
+ * @brief Defines the daemon behavior for different signals
+ * @params reaload Boolean value to define if the daemon will be realoaded 
+ * @params confFilename Name of the conf file
+ * @params port Number of the server port
+ */
 
 int read_conf_file(int reload, char* confFilename, int* port) {
 
@@ -48,6 +63,12 @@ int read_conf_file(int reload, char* confFilename, int* port) {
     return ret;
 
 }
+
+/*
+ * @brief Opens a log file
+ * @params logStream FILE pointer to log file
+ * @params logFilename Name of the log file
+ */
 
 void open_log_file(FILE *logStream, char *logFilename) {
 

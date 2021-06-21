@@ -16,9 +16,6 @@
 #define QUEUE_LENGTH 5
 #define MAX_FLOW_SIZE 1000
 
-pthread_mutex_t mut;
-int threadId;
-
 int initialize_socket(int port);
 int establish_connection(int s);
 int socket_close(int s);
